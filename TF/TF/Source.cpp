@@ -12,7 +12,7 @@ void menu(int* option) {
 		Console::ForegroundColor = ConsoleColor::Yellow;
 		cout << "1.- \tCreacion de Tabla" << endl;
 		cout << "2.- \tDibujar tabla" << endl;
-		cout << "3.- \tInsercion de Registros" << endl;
+		cout << "3.- \tInsercion de Pruebas" << endl;
 		cout << "4.- \tSeleccion de datos por columna" << endl; //arbol
 		cout << "5.- \tIndexado de datos por columna" << endl;  //arbol
 		cout << "6.- \tFiltrado de datos por columna" << endl; //arbol
@@ -55,6 +55,15 @@ int main() {
 	int contadorFila = 1;
 	int* op = new int();
 	int repetidor = 0;
+	ifstream archivo;
+	ifstream archivocopia;
+	ofstream archivoguardar;
+	const string narchivo = "Prueba.txt";
+	const string narchivoguardar = "PruebaCopia.txt";
+	string texto;
+	string textocopia;
+	char letra;
+	FILE* borrar;
 
 	do {
 		menu(op);
@@ -162,12 +171,12 @@ int main() {
 		case 7:
 			break;
 		case 8:
-			borrar = fopen("Registro.txt", "w");
+			borrar = fopen("Prueba.txt", "w");
 			fclose(borrar);
-			remove("Registro.txt");
+			remove("Prueba.txt");
 			tabla->DrawTableTXT();
-			archivo.open("Registro.txt", ios::in);
-			archivocopia.open("RegistroCopia.txt", ios::in);
+			archivo.open("Prueba.txt", ios::in);
+			archivocopia.open("PruebaCopia.txt", ios::in);
 			while (!archivocopia.eof())
 			{
 				getline(archivocopia, textocopia);
