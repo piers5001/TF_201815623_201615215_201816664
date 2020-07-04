@@ -9,21 +9,21 @@ class Table
 {
 private:
 
-	vector<Column>* columns;
+	vector<Column*>* columns;
 	map<string, Column*> columnsMap;
 
 	int key;
-	//function<string(Column*)>k1 = [&](Column* col)
-	 //{return  columns->at(1).getInt(key); };
-
-//	AVLBST<Column*, string, nullptr> arbol = new AVLBST<Column*, string, nullptr>(k1);
 
 public:
-	//AVLBST<int>* ArbolAVLInt;
+	function<string(Column*)>k1 = [&](Column* col) {
+		return col->getString(key);
+	};
+	AVLBST<Column*, string, nullptr>* arbol = new AVLBST<Column*, string, nullptr>(k1); //objeto arbol con template
+
 
 	Table() :key(0) {
 		//ArbolAVLString = new AVLBST<string, string, NULL>();
-		columns = new vector<Column>();
+		columns = new vector<Column*>();
 		columnsMap = map<string, Column*>();//no se si esta bien inicializado
 	}
 	~Table() {}
@@ -32,7 +32,7 @@ public:
 		return columnsMap;
 	}
 
-	vector<Column>* getColumns() {
+	vector<Column*>* getColumns() {
 		return columns;
 	}
 
@@ -45,18 +45,39 @@ public:
 	}
 
 
-	void indexar(string nombreCol) {
-		//Column* colum;
-		for (int i = 1; i < columns->size(); i++) {
-			if (columns->at(i).get_name() == nombreCol) {
-				for (int j = 1; j < columns->at(i).get_cant(); j++) {
-					//k1(*columns.at(i));
-				}
+	void indexar(string nombreColumna) {
+
+		for (int i = 0; i < columns->size(); i++) {
+			if (nombreColumna == columns->at(i)->get_name()) {
+				key = i; break;//optiene posic
 			}
+
 		}
-		key++;
+		//opcional
+		auto k1 = [&](Column col) {
+			return col.getString(key);//string del vector q esta en columna
+		};
+
+		for (int i = 0; i < columns->size(); i++)
+		{
+			arbol->add(columns->at(i));
+		}
 
 	}
+
+	//el nombre del arbolIndexadoseGuarda
+
+	//void Ordenar() {
+	//	for (int i = 0; i < columns->size(); i++)
+	//	{
+	//		if (columns->at(i)->get_estaIndexado()) {
+	//
+	//		}
+	//			arbol->inOrder(columns->at(i));
+	//
+	//	}
+	//}
+
 
 	//	void indexar(string nombreColumna  elem) {
 	//
@@ -89,27 +110,38 @@ public:
 
 		//}
 
-	template<typename T>
-	void buscarElementoXColumna(string nombreCol, T elem) {
-		//vector<Column>* columnasAux;
-		for (int i = 0; i < columns->size(); i++) {//cant de columnas
-			if (nombreCol == columns->at(i).get_name()) {//si el nombre coincide
-				for (int j == 0; j < columns->at(i).cant; ++j) {//cant elementos de la columna
-					if (elem == columns->at(i).getInt(j) || elem == columns->at(i).getString(j) || elem == columns->at(i).getFloat(j)) {
-						for (int z = 0; z < columns->size(); ++z) {
-							//tiene que ver el tipo del elemento y seleccionarlo(int)(float)(string)
-							if (columns->at(i).getTipo() == "int")
-								cout << columns->at(z).getInt(j) << " ";
-							if (columns->at(i).getTipo() == "string")
-								cout << columns->at(z).getString(j) << " ";
-							if (columns->at(i).getTipo() == "float")
-								cout << columns->at(z).getFloat(j) << endl;
-						}
-					}
-				}
-			}
-		}
-	}
+
+	//void buscarElementoXColumna(string nombreCol) {
+	//	int elemin = 0;
+	//	string elemstr = " ";
+	//	float elemflt = 0.0;
+	//	
+	//	for (int i = 0; i < columns->size(); i++) {//cant de columnas
+	//		if (nombreCol == columns->at(i).get_name()) {//si el nombre coincide
+	//			cout << "Esta columna contiene valores " << columns->at(i).getTipo() << endl;
+	//			cout << "Ingrese el valor que desea buscar" << endl;
+	//			if (if (columns->at(i).getTipo() == "int")) {
+	//				cin >> elemin;
+	//			}if (columns->at(i).getTipo() == "string") {
+	//				cin >> elemstr;
+	//			}if (columns->at(i).getTipo() == "float") {
+	//				cin >> elemflt;
+	//			}
+	//			for (int j = 0; j < columns->at(i).cant(); ++j) {//cant elementos de la columna
+	//				if (elemin == columns->at(i).getInt(j)) {
+	//					cout << columns->at(i).getInt(j);
+	//				}
+	//				if (elemstr == columns->at(i).getString(j)) {
+	//					cout << columns->at(i).getString(j);
+	//				}
+	//				if (elemflt == columns->at(i).getFloat(j)) {
+	//					cout << columns->at(i).getFloat(j);
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+
 
 
 	//void filtradoXColumna() {
@@ -127,62 +159,65 @@ public:
 
 	//falta terminar
 	void addColumn(Column* col) {
-		columns->push_back(*col);
+		columns->push_back(col);
 	}
 
-	void addRow() {
-		string word = ""; float numRac = 0.0; int enter = 0;
-		for (int i = 0; i < columns->size(); i++) {
-			if (columns->at(i).getTipo() == "string") {
-				cout << "Ingrese un elemeto de " << columns->at(i).get_name() << endl;
-				cin >> word;
-				columns->at(i).addStr(word);
-			}
-			if (columns->at(i).getTipo() == "float") {
-				cout << "Ingrese un elemeto de " << columns->at(i).get_name() << endl;
-				cin >> word;
-				columns->at(i).addFloat(numRac);
-			}
-			if (columns->at(i).getTipo() == "int") {
-				cout << "Ingrese un elemeto de " << columns->at(i).get_name() << endl;
-				cin >> word;
-				columns->at(i).addInt(enter);
-			}
-		}
-	}
+
 
 
 	void DrawTotalElements() {
 		cout << "-----------------------------------" << endl;
 
-		for (int i = 0; i < columns->at(0).get_cant(); ++i) {
+		for (int i = 0; i < columns->at(0)->get_cant(); ++i) {
 			for (int j = 0; j < columns->size(); ++j) {
-				if (columns->at(j).getTipo() == "string") {
-					cout << "| " << columns->at(j).getString(i) << " ";
+				if (columns->at(j)->getTipo() == "string") {
+					cout << "| " << columns->at(j)->getString(i) << " ";
 				}
-				if (columns->at(j).getTipo() == "int") {
-					cout << "| " << columns->at(j).getInt(i) << " ";
+				if (columns->at(j)->getTipo() == "int") {
+					cout << "| " << columns->at(j)->getInt(i) << " ";
 				}
-				if (columns->at(j).getTipo() == "float") {
-					cout << "| " << columns->at(j).getFloat(i) << " ";
+				if (columns->at(j)->getTipo() == "float") {
+					cout << "| " << columns->at(j)->getFloat(i) << " ";
 				}
 			}
 			cout << endl;
 		}
+
 	}
-
-
-
 
 	void DrawTable() {
 
 		cout << "-----------------------------------" << endl;
 		for (int i = 0; i < columns->size(); ++i) {
-			cout << "|  " << columns->at(i).get_name();
+			cout << "|  " << columns->at(i)->get_name();
 		}
 		cout << "   |" << endl;
 		DrawTotalElements();
 
+	}
+
+
+	void addRow() {
+		string word = ""; float numRac = 0.0; int enter = 0;
+		for (int i = 0; i < columns->size(); i++) {
+			if (columns->at(i)->getTipo() == "string") {
+				cout << "Ingrese un elemeto de " << columns->at(i)->get_name() << endl;
+				cin >> word;
+				columns->at(i)->addStr(word);
+			}
+			if (columns->at(i)->getTipo() == "float") {
+				cout << "Ingrese un elemeto de " << columns->at(i)->get_name() << endl;
+				cin >> numRac;
+				columns->at(i)->addFloat(numRac);
+			}
+			if (columns->at(i)->getTipo() == "int") {
+				cout << "Ingrese un elemeto de " << columns->at(i)->get_name() << endl;
+				cin >> enter;
+				columns->at(i)->addInt(enter);
+			}
+		}
+		columns->at(0)->changeCant();
+		DrawTable();
 	}
 
 	void DrawTotalElementsTXT() {
@@ -190,16 +225,16 @@ public:
 		archivo.open("Prueba.txt", ios::app);
 		archivo << "-----------------------------------" << endl;
 
-		for (int i = 0; i < columns->at(0).get_cant(); ++i) {
+		for (int i = 0; i < columns->at(0)->get_cant(); ++i) {
 			for (int j = 0; j < columns->size(); ++j) {
-				if (columns->at(j).getTipo() == "string") {
-					archivo << "| " << columns->at(j).getString(i) << " ";
+				if (columns->at(j)->getTipo() == "string") {
+					archivo << "| " << columns->at(j)->getString(i) << " ";
 				}
-				if (columns->at(j).getTipo() == "int") {
-					archivo << "| " << columns->at(j).getInt(i) << " ";
+				if (columns->at(j)->getTipo() == "int") {
+					archivo << "| " << columns->at(j)->getInt(i) << " ";
 				}
-				if (columns->at(j).getTipo() == "float") {
-					archivo << "| " << columns->at(j).getFloat(i) << " ";
+				if (columns->at(j)->getTipo() == "float") {
+					archivo << "| " << columns->at(j)->getFloat(i) << " ";
 				}
 			}
 			archivo << endl;
@@ -211,7 +246,7 @@ public:
 		archivo.open("Prueba.txt", ios::app);
 		archivo << "-----------------------------------" << endl;
 		for (int i = 0; i < columns->size(); ++i) {
-			archivo << "|  " << columns->at(i).get_name();
+			archivo << "|  " << columns->at(i)->get_name();
 		}
 		archivo << "   |" << endl;
 		DrawTotalElementsTXT();

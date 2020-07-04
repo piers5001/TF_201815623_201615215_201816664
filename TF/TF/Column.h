@@ -17,7 +17,7 @@ private:
 	vector<string> strData; //2
 	vector<float> floatData; //3
 	int cant;
-
+	bool estaIndexado;
 
 public:
 	Column() {
@@ -25,6 +25,7 @@ public:
 		intData = vector<int>();
 		strData = vector<string>();
 		floatData = vector<float>();
+		estaIndexado = false;
 
 	}
 	Column(string nombre, string tipo, int cant) {
@@ -42,6 +43,13 @@ public:
 		return cant;
 	}
 
+	bool get_estaIndexado() {
+		return estaIndexado;
+	}
+
+	void changeCant() {
+		cant++;
+	}
 	void setName(string _name) {
 		nombre = _name;
 	}

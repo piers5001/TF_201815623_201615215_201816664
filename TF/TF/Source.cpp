@@ -4,6 +4,10 @@
 #include <string.h>
 //#include "ArbolAVL.h"
 
+
+
+
+
 void menu(int* option) {
 	do {
 		system("Cls");
@@ -12,7 +16,7 @@ void menu(int* option) {
 		Console::ForegroundColor = ConsoleColor::Yellow;
 		cout << "1.- \tCreacion de Tabla" << endl;
 		cout << "2.- \tDibujar tabla" << endl;
-		cout << "3.- \tInsercion de Pruebas" << endl;
+		cout << "3.- \tInsercion de Registros" << endl;
 		cout << "4.- \tSeleccion de datos por columna" << endl; //arbol
 		cout << "5.- \tIndexado de datos por columna" << endl;  //arbol
 		cout << "6.- \tFiltrado de datos por columna" << endl; //arbol
@@ -156,9 +160,10 @@ int main() {
 		case 3: tabla->addRow();
 			system("pause");
 			break;
-		case 4:cout << "Ingrese el nombre de la columna: "; string nombc; cin >> nombc; cout << endl;
-			template<typename T>
-			tabla->buscarElementoXColumna(nombc, T);
+		case 4://cout << "Ingrese el nombre de la columna: "; string nombc; cin >> nombc; cout << endl;
+
+
+			//tabla->buscarElementoXColumna(nombc);
 			break;
 		case 5:
 			cout << "Ingrese el nombre de la columna que desea indexar: ";

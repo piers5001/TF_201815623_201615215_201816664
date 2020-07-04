@@ -1,10 +1,11 @@
-
+#pragma once
 #ifndef __AVL_H__
 #define __AVL_H__
-#define maxi(a, b) (a > b? a : b)
 
 #include <functional>
+
 using namespace std;
+#define maxi(a, b) (a > b? a : b)
 
 template<typename T, typename R = T, T NONE = 0>
 class AVLBST {
@@ -13,7 +14,6 @@ class AVLBST {
 		Node* left;
 		Node* right;
 		int     height;
-		int row;//localizar al nodo por su fila
 
 		Node(T element)
 			: element(element), height(0),
@@ -24,10 +24,8 @@ class AVLBST {
 	function<R(T)>  key;
 	int             len;
 public:
-	AVLBST(function<R(T)> key = [](T a) { return a; }) : key(key), root(nullptr), len(0) {}
-
-
-
+	AVLBST(function<R(T)> key = [](T a) { return a; })
+		: key(key), root(nullptr), len(0) {}
 	~AVLBST() { clear(root); }
 	int height() { return height(root); }
 	int size() { return len; }
@@ -37,11 +35,13 @@ public:
 	void remove(R val) { remove(root, val); }
 
 	T find(R val) { return find(root, val); }
-	T greaterThan(T val) { return greaterThan(root, val); }
+	T greaterThan(R val) { return greaterThan(root, val); }
 
 	void inOrder(function<void(T)> proc) { inOrder(root, proc); }
 
 private:
+
+
 	void clear(Node*& node) {
 		if (node != nullptr) {
 			clear(node->left);
@@ -51,9 +51,11 @@ private:
 		}
 	}
 
+
 	int height(Node* node) {
 		return node == nullptr ? -1 : node->height;
 	}
+
 
 	void add(Node*& node, T elem) {
 		if (node == nullptr) {
@@ -61,7 +63,7 @@ private:
 			++len;
 		}
 		else {
-			if (elem < node->element) {
+			if (key(elem) < key(node->element)) {
 				add(node->left, elem);
 			}
 			else {
@@ -70,6 +72,7 @@ private:
 			balance(node);
 		}
 	}
+
 
 	T max(Node*& node) {
 		if (node->right == nullptr) {
@@ -86,6 +89,7 @@ private:
 		}
 	}
 
+
 	void removeAux(Node*& node) {
 		if (node->left == nullptr) {
 			auto aux = node;
@@ -98,7 +102,7 @@ private:
 	}
 
 
-	void remove(Node*& node, T val) {
+	void remove(Node*& node, R val) {
 		if (node != nullptr) {
 			if (val == key(node->elem)) {
 				removeAux(node);
@@ -116,7 +120,7 @@ private:
 	}
 
 
-	T find(Node* node, T val) {
+	T find(Node* node, R val) {
 		if (node == nullptr) {
 			return NONE;
 		}
@@ -131,23 +135,8 @@ private:
 		}
 	}
 
-	T findByRow(Node* node, int valrow) {
-		if (node == nullptr) {
-			return NONE;
-		}
-		else if (valrow == key(node->row)) {
-			return node->element;
-		}
-		else if (valrow < key(node->row)) {
-			return findByRow(node->left, valrow);
-		}
-		else {
-			return findByRow(node->right, valrow);
-		}
-	}
 
-
-	T greaterThan(Node* node, T val) {
+	T greaterThan(Node* node, R val) {
 		if (node == nullptr) {
 			return NONE;
 		}
@@ -158,8 +147,7 @@ private:
 	}
 
 
-	void inOrder(Node* node,
-		function<void(T)> proc) {
+	void inOrder(Node* node, function<void(T)> proc) {
 		if (node != nullptr) {
 			inOrder(node->left, proc);
 			proc(node->element);
@@ -168,6 +156,8 @@ private:
 	}
 
 private:
+
+
 	void updateHeight(Node* node) {
 		if (node != nullptr) {
 			int hl = height(node->left);
@@ -176,6 +166,8 @@ private:
 			node->height = maxi(hl, hr) + 1;
 		}
 	}
+
+
 	void rotateLeft(Node*& node) {
 		Node* aux = node->right;
 		node->right = aux->left;
@@ -183,7 +175,7 @@ private:
 		aux->left = node;
 		updateHeight(aux);
 		node = aux;
-	};
+	}
 
 
 	void rotateRight(Node*& node) {
